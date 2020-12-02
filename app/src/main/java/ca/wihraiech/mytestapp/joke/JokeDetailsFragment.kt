@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ca.wihraiech.mytestapp.R
 import ca.wihraiech.mytestapp.common.loadUrl
-import ca.wihraiech.mytestapp.common.loadUrl2
 import kotlinx.android.synthetic.main.fragment_joke_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
