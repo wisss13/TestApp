@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="ca.wihraiech.mytestapp.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/actionNavigationHomeFromSplash"
+            app:destination="@+id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ca.wihraiech.mytestapp.home.HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/actionNavigationToJokeDetails"
+            app:destination="@+id/jokeDetailsFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/jokeDetailsFragment"
+        android:name="ca.wihraiech.mytestapp.joke.JokeDetailsFragment"
+        tools:layout="@layout/fragment_joke_details">
+
+        <argument
+            android:name="type"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="setup"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="punchline"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+</navigation>
