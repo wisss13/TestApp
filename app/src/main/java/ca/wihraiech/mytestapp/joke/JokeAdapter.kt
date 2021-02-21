@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import ca.wihraiech.mytestapp.R
 import ca.wihraiech.mytestapp.api.model.dto.JokeDto
+import ca.wihraiech.mytestapp.databinding.ItemJokeBinding
 import kotlinx.android.synthetic.main.item_joke.view.*
 
 class JokeAdapter(
@@ -13,11 +13,15 @@ class JokeAdapter(
 ) :
     PagingDataAdapter<JokeDto, JokeViewHolder>(DataDifferntiator) {
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): JokeViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_joke, viewGroup, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
 
-        return JokeViewHolder(view)
+        return JokeViewHolder(
+            ItemJokeBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(viewHolder: JokeViewHolder, position: Int) {

@@ -1,4 +1,4 @@
-package ca.wihraiech.mytestapp.api.model;
+package ca.wihraiech.mytestapp.api.model.pojo;
 
 import com.squareup.moshi.Json;
 

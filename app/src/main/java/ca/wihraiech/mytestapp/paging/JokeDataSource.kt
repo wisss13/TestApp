@@ -1,33 +1,38 @@
 package ca.wihraiech.mytestapp.paging
 
 import androidx.paging.PagingSource
-import ca.wihraiech.mytestapp.api.model.dto.JokeDto
+import ca.wihraiech.mytestapp.api.model.dto.UserDto
 import ca.wihraiech.mytestapp.common.CommonResult
-import ca.wihraiech.mytestapp.useCase.IFetchJokesUseCase
+import ca.wihraiech.mytestapp.provider.IUserProvider
+import ca.wihraiech.mytestapp.provider.UserProvider
+import ca.wihraiech.mytestapp.repository.UserRepository
 
 class JokeDataSource(
-    private val fetchJokesUseCase: IFetchJokesUseCase
-) : PagingSource<Int, JokeDto>() {
+    private val userProvider: IUserProvider
+) : PagingSource<Int, UserDto>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, JokeDto> {
-        try {
-            val currentLoadingPageKey = params.key ?: 1
-            val responseData = when (val response = fetchJokesUseCase.execute()) {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserDto> {
+        val currentLoadingPageKey = params.key ?: 1
+        val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
+        return try {
+            when (val response = userProvider.fetchUserList()) {
                 is CommonResult.Success -> {
-                    response.data ?: emptyList()
+                    val responseData = response.data ?: emptyList()
+                    LoadResult.Page(
+                        data = responseData,
+                        prevKey = prevKey,
+                        nextKey = currentLoadingPageKey.plus(1)
+                    )
                 }
                 is CommonResult.Error -> {
-                    emptyList()
+                    LoadResult.Error(response.error)
+                }
+                else -> {
+                    LoadResult.Error(Exception())
                 }
             }
 
-            val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
 
-            return LoadResult.Page(
-                data = responseData,
-                prevKey = prevKey,
-                nextKey = currentLoadingPageKey.plus(1)
-            )
         } catch (e: Exception) {
             return LoadResult.Error(e)
         }
