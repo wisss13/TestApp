@@ -1,6 +1,6 @@
 package ca.wihraiech.mytestapp.api.model.dto.mapper
 
-import ca.wihraiech.mytestapp.api.model.JokePojo
+import ca.wihraiech.mytestapp.api.model.pojo.JokePojo
 import ca.wihraiech.mytestapp.api.model.dto.JokeDto
 
 internal fun JokePojo.toJokeDto(): JokeDto {

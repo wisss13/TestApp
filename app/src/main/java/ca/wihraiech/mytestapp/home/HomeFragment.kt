@@ -7,22 +7,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.wihraiech.mytestapp.R
-import ca.wihraiech.mytestapp.api.model.dto.JokeDto
-import ca.wihraiech.mytestapp.joke.JokeAdapter
-import ca.wihraiech.mytestapp.joke.JokeItemListener
+import ca.wihraiech.mytestapp.api.model.dto.UserDto
+import ca.wihraiech.mytestapp.user.UserAdapter
+import ca.wihraiech.mytestapp.user.UserItemListener
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
     private val homeViewModel by viewModel<HomeViewModel>()
-    lateinit var jokeAdapter: JokeAdapter
+
+    //    lateinit var jokeAdapter: JokeAdapter
+    lateinit var jokeAdapter: UserAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +37,10 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
         updateList()
-
     }
 
     private fun setupRecyclerView() {
-        jokeAdapter = JokeAdapter(buildJokeItemListener())
+        jokeAdapter = UserAdapter(buildJokeItemListener())
 
         jokeRecyclerview?.apply {
             setHasFixedSize(true)
@@ -60,7 +59,7 @@ class HomeFragment : Fragment() {
 
             val errorState = when {
                 loadState.append is LoadState.Error -> loadState.append as LoadState.Error
-                loadState.prepend is LoadState.Error ->  loadState.prepend as LoadState.Error
+                loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
                 loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
                 else -> null
             }
@@ -70,13 +69,26 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun buildJokeItemListener(): JokeItemListener {
-        return object : JokeItemListener {
-            override fun onClick(jokeDto: JokeDto?) {
+//    private fun buildJokeItemListener(): JokeItemListener {
+//        return object : JokeItemListener {
+//            override fun onClick(jokeDto: JokeDto?) {
+//                val action = HomeFragmentDirections.actionNavigationToJokeDetails(
+//                    type = jokeDto?.type,
+//                    setup = jokeDto?.setup,
+//                    punchline = jokeDto?.punchline
+//                )
+//                findNavController().navigate(action)
+//            }
+//        }
+//    }
+
+    private fun buildJokeItemListener(): UserItemListener {
+        return object : UserItemListener {
+            override fun onClick(userDto: UserDto?) {
                 val action = HomeFragmentDirections.actionNavigationToJokeDetails(
-                    type = jokeDto?.type,
-                    setup = jokeDto?.setup,
-                    punchline = jokeDto?.punchline
+                    type = userDto?.userId.toString(),
+                    setup = userDto?.title,
+                    punchline = userDto?.body
                 )
                 findNavController().navigate(action)
             }
@@ -84,10 +96,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateList() {
-        lifecycleScope.launch {
-            homeViewModel.listData.observe(viewLifecycleOwner, Observer { pagingData ->
-                jokeAdapter.submitData(lifecycle, pagingData)
-            })
-        }
+        homeViewModel.listData.observe(viewLifecycleOwner, Observer { pagingData ->
+            jokeAdapter.submitData(lifecycle, pagingData)
+        })
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onStop() {
+        super.onStop()
     }
 }
